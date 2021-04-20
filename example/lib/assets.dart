@@ -11,16 +11,16 @@ class I18n {
 
   I18n(this._lookup);
 
-  static Locale _locale;
+  static Locale? _locale;
 
-  static Locale get currentLocale => _locale;
+  static Locale? get currentLocale => _locale;
 
   /// add custom locale lookup which will be called first
-  static I18nLookup customLookup;
+  static I18nLookup? customLookup;
 
   static const I18nDelegate delegate = I18nDelegate();
 
-  static I18n of(BuildContext context) => Localizations.of<I18n>(context, I18n);
+  static I18n of(BuildContext context) => Localizations.of<I18n>(context, I18n)!;
 
   static List<Locale> get supportedLocales {
     return const <Locale>[
