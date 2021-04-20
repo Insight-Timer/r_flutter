@@ -12,7 +12,8 @@ import 'package:yaml/yaml.dart';
 void main(List<String> args) {
   final arguments = CommandLineArguments()..parse(args);
 
-  final configRaw = safeCast<YamlMap>(loadYaml(File(arguments.pubspecFilename).absolute.readAsStringSync()));
+  final configRaw = safeCast<YamlMap>(
+      loadYaml(File(arguments.pubspecFilename).absolute.readAsStringSync()));
   final config = Config.parsePubspecConfig(configRaw ?? YamlMap());
 
   final res = parseResources(config);
@@ -25,21 +26,21 @@ void main(List<String> args) {
 }
 
 class CommandLineArguments {
-  String pubspecFilename;
-  String outputFilename;
+  late String pubspecFilename;
+  late String outputFilename;
 
   void parse(List<String> args) {
     ArgParser()
       ..addOption(
         "pubspec-file",
         defaultsTo: 'pubspec.yaml',
-        callback: (value) => pubspecFilename = safeCast(value),
+        callback: (value) => pubspecFilename = safeCast<String>(value)!,
         help: 'Specify the pubspec file.',
       )
       ..addOption(
         "output-file",
         defaultsTo: 'lib/assets.dart',
-        callback: (value) => outputFilename = safeCast(value),
+        callback: (value) => outputFilename = safeCast<String>(value)!,
         help: 'Specify the output file.',
       )
       ..parse(args);
