@@ -299,14 +299,14 @@ class I18n {
     return customLookup?.hello_there ?? _lookup.hello_there;
   }
 
-  String getString(String key, [Map<String, String> placeholders]) {
+  String? getString(String key, [Map<String, String>? placeholders]) {
     switch (key) {
       case I18nKeys.appName:
         return appName;
       case I18nKeys.string1:
         return string1;
       case I18nKeys.stringWithPlaceholder:
-        return stringWithPlaceholder(placeholders["placeholder"]);
+        return stringWithPlaceholder(placeholders?["placeholder"] ?? "");
       case I18nKeys.hello:
         return hello;
       case I18nKeys.withLineBreak:
@@ -328,8 +328,8 @@ class I18nKeys {
 }
 
 class I18nLookup {
-  String getString(String key, [Map<String, String> placeholders]) {
-    return null;
+  String getString(String key, [Map<String, String>? placeholders]) {
+    throw UnimplementedError("I18nLookup.getString");
   }
 
   String get appName {
@@ -504,8 +504,7 @@ class I18nDelegate extends LocalizationsDelegate<I18n> {
   bool shouldReload(I18nDelegate old) => false;
 
   I18nLookup _findLookUpFromLocale(Locale locale) {
-    final String lang = locale != null ? locale.toString() : "";
-    switch (lang) {
+    switch (locale.toString()) {
         case "zh_HK":
           return I18nLookup_zh_HK();
         case "zh_Hant":
@@ -517,8 +516,7 @@ class I18nDelegate extends LocalizationsDelegate<I18n> {
         case "de_AT":
           return I18nLookup_de_AT();
     }
-    final String languageCode = locale != null ? locale.languageCode : "";
-    switch (languageCode) {
+    switch (locale.languageCode) {
         case "de":
           return I18nLookup_de();
         case "en":
@@ -535,24 +533,16 @@ class Fonts {
 }
 
 class Assets {
-  /// ![](file:///Users/user/path/lib/assets/sub/sub/test_asset.txt)
   static const String subSubTestAsset = "lib/assets/sub/sub/test_asset.txt";
-  /// ![](file:///Users/user/path/lib/assets/sub/test_asset.txt)
   static const String assetsSubTestAsset = "lib/assets/sub/test_asset.txt";
-  /// ![](file:///Users/user/path/lib/assets/sub/temp.txt)
   static const String temp = "lib/assets/sub/temp.txt";
-  /// ![](file:///Users/user/path/lib/assets/sub2/sub2.txt)
   static const String sub2 = "lib/assets/sub2/sub2.txt";
-  /// ![](file:///Users/user/path/lib/assets/svg.svg)
   static const SvgFile svg = SvgFile("lib/assets/svg.svg");
-  /// ![](file:///Users/user/path/lib/assets/test_asset2.txt)
   static const String testAsset2 = "lib/assets/test_asset2.txt";
-  /// ![](file:///Users/user/path/lib/assets/%C3%A4%C3%9Fet.txt)
   static const String aesset = "lib/assets/äßet.txt";
 }
 
 class Images {
-  /// ![](file:///Users/user/path/lib/assets/extension.png)
   static AssetImage get extension => const AssetImage("lib/assets/extension.png");
 }
 
