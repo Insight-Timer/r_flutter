@@ -12,7 +12,7 @@ dependencies:
   yaml: ^3.1.0
   recase: any
   build: '>=1.1.4 <3.0.0'
-  build_config: '>=1.0.0 <2.0.0'
+  build_config: '>=0.2.6 <2.0.0'
   collection: ^1.15.0
   glob: ^2.0.0
 
