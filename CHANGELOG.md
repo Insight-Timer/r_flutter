@@ -1,3 +1,11 @@
+## 0.9.0
+  * Add support for webp images
+  * Add support for i18n features
+  * Thanks to [@kostadin-damyanov-prime](https://github.com/kostadin-damyanov-prime)
+
+## 0.8.0
+  * remove deprecated `flutter generate`. Use `build_runner` instead
+
 ## 0.7.1 (BREAKING CHANGE)
 
   * r_flutter generates now nullsafe code, if you update to v0.7.0, your project should target dart >= 2.12

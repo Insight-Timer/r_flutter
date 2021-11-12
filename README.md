@@ -2,40 +2,42 @@ r_flutter
 ====
 
 Generate constants for resources which require using them as a String like fonts and assets. Generated file will look like this:
-[assets.dart](https://github.com/timfreiheit/r_flutter/blob/master/example/.dart_tool/build/generated/example/lib/assets.dart)
+[assets.dart](https://github.com/timfreiheit/r_flutter/blob/master/example/lib/assets.dart)
 
 ## Setup
 
-1. Ensure that your assets and localization files are inside lib directory. This is required for builder plugin to detect changes.
-
-2. Add dependencies in your pubspec.yaml:
+1. Add dependencies in your pubspec.yaml:
 ```yaml
 dependencies:
   flutter:
     sdk: flutter
 
-builders:
+dev_dependencies:
+  build_runner:
   r_flutter: <version>
 ```
 
-3. Add r_flutter configuration in your pubspec.yaml:
+2. Add r_flutter configuration in your pubspec.yaml:
 ```yaml
 # important: this is root level option
 r_flutter:
   intl: lib/i18n/en.arb
+  add_file_path_comments: false # default is true
   ignore:
     - lib/assets/sub/ignore1 #use ignore option to skip 
     - lib/assets/sub/ignore2
     - lib/i18n
 ```
 Options:
-- intl: Points to a localization file that would be used to generate localization keys. arb files are essentialy json files with some special, optional keys. Specifing this is optional.
-- ignore: specifies a list of files/directories that should be skipped during code generation. 
+- `intl`: Points to a localization file that would be used to generate localization keys. arb files are essentialy json files with some special, optional keys. Specifing this is optional.
+- `add_file_path_comments`: specifies wither it should print file paths comments for assets files.
+- `ignore`: specifies a list of files/directories that should be skipped during code generation. 
 
-4. Execute `flutter generate` command in your project's directory. You could also run tests or just build the app. Compiler must run at least once to generate the file.
-`assets.dart` will be generated into `.dart_tool/build/generated/YOUR_PACKAGE_NAME/assets.dart`
+3. Execute `flutter packages pub run build_runner build` command in your project's directory.
+Alternativly you can run `flutter pub run r_flutter:generate` to only run r_flutter without using the whole `build_runner`.
+`assets.dart` will be generated into `lib/assets.dart`
 
-5. Import `assets.dart` and start using it:
+4. Import `assets.dart` and start using it:
 ```dart
 import 'assets.dart'
 Image(image: Images.image)
@@ -78,6 +80,32 @@ import 'assets.dart'
 Text(I18n.of(context).hello)
 ```
 
+#### Organize I18n strings by feature
+
+It is possible to organize i18n strings by feature so that they are not stored in one huge file.
+
+1. Add default localization file and feature definitions to `pubspec.yaml`
+```yaml
+r_flutter:
+  intl: lib/i18n/en.arb
+  intl_features:
+    - name: home
+      path: lib/custom/path/to/home/
+    - name: announcement
+    - name: profile
+```
+
+If a path is not specified it is assumed to be a subdirectory of the main intl file directory. In this example the announcement and profile translation files will be placed under `lib/i18n/announcement/` and `lib/i18n/profile/` respectively.
+
+2. Create the actual translation files for the features and run the generator as usual.
+
+3. Use it
+```dart
+import 'assets.dart'
+Text(I18n.of(context).home.hello)
+```
+
+
 ### Custom asset classes
 
 r_flutter supports third party packages like flutter_svg by providing option to convert generated constants directly into the desired class. To use it, you need to configure which file extension should by handled by which class, for example:
@@ -95,32 +123,6 @@ static const SvgFile svg = SvgFile("lib/assets/svg.svg")
 ```
 
 ## Troubleshooting
-
-#### incompatibility issued with [build_runner](https://pub.dev/packages/build_runner)
-
-At the moment this integration does not work well together with [build_runner](https://pub.dev/packages/build_runner).
-In this case the code generation can be executed using the command line tool.
-```yaml
-dev_dependencies:
-  r_flutter: <version>
-```
-
-Execution:
-```
-flutter pub run r_flutter:generate
-```
-
-#### `assets.dart` not found
-
-Execute `flutter generate` command in your project's directory. You could also run tests or just build the app. Compiler must run at least once to generate the file.
-`assets.dart` will be generated into `.dart_tool/build/generated/YOUR_PACKAGE_NAME/assets.dart`
-
-#### news keys not resolvable in IDE
-
-When `assets.dart` is regenerated, sometimes it is not correctly indexed by the IDE:
-Building should run anyway, even though that the IDE shows an error.
-
-If the error constits, check the `assets.dart` and maybe add a Whitespace somewhere. That will trigger the IDE to re-index.
 
 #### iOS won't show the correct language
 
