@@ -10,13 +10,16 @@ import 'i18n/generator.dart';
 String generateFile(Resources res, Config arguments) {
   final classes = <DartClass>[];
   if (res.i18n != null) {
-    classes.addAll(generateI18nClasses(res.i18n!));
+    classes.addAll(generateI18nClasses(res.i18n!, res.i18nFeatures));
   }
   final fontClass = generateFontClass(res.fonts);
   if (fontClass != null) {
     classes.add(fontClass);
   }
-  classes.addAll(generateAssetsClass(res.assets.assets));
+  classes.addAll(generateAssetsClass(
+    res.assets.assets,
+    addFilePathComments: arguments.addFilePathComments,
+  ));
 
   final fullCode = StringBuffer('''
 // GENERATED CODE - DO NOT MODIFY BY HAND
